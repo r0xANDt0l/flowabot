@@ -535,7 +535,8 @@ async function getScore(recent_raw, cb){
         countmiss: Number(recent_raw.statistics.miss ?? 0),
         mods: recent_raw.mods,
         date: recent_raw.ended_at,
-        unsubmitted: false
+        unsubmitted: false,
+        thumbnail_url: recent_raw.beatmapset.covers["list@2x"]
     }, recent);
 
 	if('pp' in recent_raw && Number(recent_raw.pp) > 0){
@@ -658,11 +659,9 @@ async function getScore(recent_raw, cb){
             const fc_play_params = {
                 mods: getModsEnum(recent_raw.mods.map(x => x.acronym)),
                 clockRate: speed,
-                acc: calculateAccuracy({ 
-                    great: recent_raw.statistics.great ?? 0,
-                    ok: recent_raw.statistics.ok ?? 0,
-                    meh: recent_raw.statistics.meh ?? 0,
-                })
+                n300: (recent_raw.statistics.great ?? 0) + (recent_raw.statistics.miss ?? 0),
+                n100: recent_raw.statistics.ok ?? 0,
+                n50: recent_raw.statistics.meh ?? 0,
             }
 
             const rosu_map = new Beatmap(beatmap_params)
@@ -1239,7 +1238,7 @@ module.exports = {
             text: `Mapped by ${recent.creator}${helper.sep}${ranked_text} on ${DateTime.fromISO(ranked_date).toFormat('dd MMMM yyyy')}`
         };
         embed.thumbnail = {
-            url: `https://b.ppy.sh/thumb/${recent.beatmapset_id}l.jpg`
+            url: recent.thumbnail_url
         };
         let lines = ['', '', '', ''];
 
