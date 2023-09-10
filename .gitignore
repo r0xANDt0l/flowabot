@@ -79,3 +79,4 @@ maps/
 package-lock.json
 yarn.lock
 .vscode
+config.json

@@ -953,7 +953,7 @@ async function getUserId(u){
     return {user_id: user.id}
 }
 
-module.exports = {
+ module.exports = {
     init: async function(client, client_id, client_secret, _last_beatmap, api_key){
 		discord_client = client;
 		last_beatmap = _last_beatmap;
@@ -1349,6 +1349,35 @@ module.exports = {
         if(error) { cb("Couldn't reach osu!api. 💀") }
 
         api.get(`/users/${user_id}/scores/recent`, { params: { limit: limit, include_fails: pass, mode: "osu" } }).then(response => {
+
+            response = response.data;
+            //console.log(response)
+            if(response.length < 1){
+                cb(`No recent ${options.pass ? 'passes' : 'plays'} found for ${options.user}. 🤡`);
+                return;
+            }
+
+            let recent_raw;
+
+            let recent = {};
+
+            if(response.length < options.index)
+                options.index = response.length;
+
+            recent_raw = response[options.index - 1];
+
+            getScore(recent_raw, cb);
+        });
+    },
+
+	get_recent_mania: async function(options, cb){
+        helper.log(options);
+        let limit = options.index;
+        let pass = options.pass ? 0 : 1;
+        let { user_id, error } = await getUserId(options.user);
+        if(error) { cb("Couldn't reach osu!api. 💀") }
+
+        api.get(`/users/${user_id}/scores/recent`, { params: { limit: limit, include_fails: pass, mode: "mania" } }).then(response => {
 
             response = response.data;
             //console.log(response)
@@ -2140,7 +2169,7 @@ module.exports = {
     },
 
     get_user: function(options, cb){
-        api.get(`/users/${options.u}/osu`).then(async function (response) {
+        api.get(`/users/${options.u}/${options.m}`).then(async function (response) {
             response = response.data;
 
 			if(response.length == 0){

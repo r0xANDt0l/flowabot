@@ -10,10 +10,10 @@
         "config": "node generate-config",
         "emojis": "node upload-emojis"
     },
-    "author": "LeaPhant",
+    "author": "r0xANDt0l",
     "repository": {
         "type": "git",
-        "url": "https://github.com/LeaPhant/flowabot.git"
+        "url": "https://github.com/r0xANDt0l/flowabot/"
     },
     "license": "MIT",
     "dependencies": {

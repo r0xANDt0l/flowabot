@@ -2,12 +2,12 @@ const osu = require('../osu.js');
 const helper = require('../helper.js');
 
 module.exports = {
-    command: ['osu', 'osu2'],
-    description: "Show osu! stats.",
+    command: ['mania'],
+    description: "Show osu!mania stats.",
     usage: '[username]',
     example: {
-        run: "osu nathan_on_osu",
-        result: "Returns nathan on osu's osu! stats."
+        run: "osu dressurf",
+        result: "Returns dressurf's osu!mania stats."
     },
     configRequired: ['credentials.osu_api_key'],
     call: obj => {
@@ -27,7 +27,7 @@ module.exports = {
                 return false;
             }
 
-            osu.get_user({u: osu_user,m: osu, extended}, (err, embed) => {
+            osu.get_user({u: osu_user, m: mania, extended}, (err, embed) => {
                 if(err){
                     reject(err);
                     helper.error(err);
