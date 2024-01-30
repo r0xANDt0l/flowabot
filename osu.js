@@ -1345,6 +1345,7 @@ async function getUserId(u){
         helper.log(options);
         let limit = options.index;
         let pass = options.pass ? 0 : 1;
+		let stable = options.stable ? 0 : 1;
         let { user_id, error } = await getUserId(options.user);
         if(error) { cb("Couldn't reach osu!api. 💀") }
 
