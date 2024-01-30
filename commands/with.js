@@ -24,7 +24,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             let { argv, msg, user_ign, last_beatmap } = obj;
 
-            let modsSet = false, accSet = false, beatmapSet = false;
+            let modsSet = false, accSet = false, beatmapSet = false, speedSet = false;
 
             let options = {
                 mods: [],
@@ -38,16 +38,19 @@ module.exports = {
                 }else if(arg.endsWith('%')){
                     options.custom_acc = parseFloat(arg);
                     accSet = true;
+                }else if(arg.endsWith('*') || arg.endsWith('x')) {
+                    options.speed_change = parseFloat(arg);
+                    speedSet = true;
                 }else{
                     options.beatmap_id = osu.parse_beatmap_url_sync(arg, false);
-                    beatmapSet = true;
+                    if (options.beatmap_id) beatmapSet = true;
                 }
             });
 
             if(msg.channel.id in last_beatmap && beatmapSet == false){
                 options.beatmap_id = last_beatmap[msg.channel.id].beatmap_id;
 
-                if(!modsSet) {
+                if(!modsSet && !speedSet) {
                     mods = last_beatmap[msg.channel.id].mods
                     if (Array.isArray(mods)) {
                         options.mods = mods
